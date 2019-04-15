@@ -18,11 +18,11 @@ public class App extends Application
 	public void start(Stage primaryStage) throws Exception {
 		primaryStage.setTitle("Hello World!");
         Button btn = new Button();
-        btn.setText("Say 'Hello World'");
+        btn.setText("Test - JavaFx Application");
         btn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                System.out.println("Initial Test Javafx");
+                System.out.println("Say 'Hello World'");
             }
         });
         
