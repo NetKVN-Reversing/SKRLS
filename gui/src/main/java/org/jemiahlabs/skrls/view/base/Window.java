@@ -4,6 +4,7 @@ import java.util.Map;
 
 public interface Window {
 	void setParams(Map<String, Object> params);
+	Map<String, Object> getParams();
 	void setTitle(String title);
 	void show();
 	void hide();
