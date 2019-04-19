@@ -1,11 +1,8 @@
 package org.jemiahlabs.skrls.gui;
 
+import org.jemiahlabs.skrls.view.base.javafxwindows.StageBuilder;
+
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 public class App extends Application
@@ -16,20 +13,11 @@ public class App extends Application
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		primaryStage.setTitle("Hello World!");
-        Button btn = new Button();
-        btn.setText("Test - JavaFx Application");
-        btn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                System.out.println("Say 'Hello World'");
-            }
-        });
-        
-        StackPane root = new StackPane();
-        root.getChildren().add(btn);
-        primaryStage.setScene(new Scene(root, 300, 250));
-        primaryStage.setMaximized(true);
-        primaryStage.show();
+		StageBuilder builder = new StageBuilder("/view/aboutmestage.fxml", primaryStage);
+		builder
+			.setTitle("Test Javaxfx")
+			.draggable()
+			.build()
+			.show();
 	}
 }
