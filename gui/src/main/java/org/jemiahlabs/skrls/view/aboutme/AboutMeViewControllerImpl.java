@@ -7,7 +7,7 @@ import org.jemiahlabs.skrls.view.base.Window;
 import javafx.fxml.FXML;
 import javafx.scene.input.MouseEvent;
 
-public class AboutMeViewImpl implements AboutMeViewController {
+public class AboutMeViewControllerImpl implements AboutMeViewController {
 	private Window window;
 	private PrincipalWindow principalWindow;
 	
