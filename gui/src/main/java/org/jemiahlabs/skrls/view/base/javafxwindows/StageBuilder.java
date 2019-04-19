@@ -73,9 +73,9 @@ public class StageBuilder implements WindowBuildable {
 		try {
 			Parent sceneGraph = loader.load();
 			
-			if (isDecorable) stage.initStyle(StageStyle.UNDECORATED);
-			if (isResizable) stage.setResizable(isResizable);
-			if (isMaximized) stage.setMaximized(isMaximized);
+			if (!isDecorable) stage.initStyle(StageStyle.UNDECORATED);
+			stage.setResizable(isResizable);
+			stage.setMaximized(isMaximized);
 			if (isDraggable) {
 				sceneGraph.setOnMousePressed((event) -> {
 					xOffset = event.getSceneX();
