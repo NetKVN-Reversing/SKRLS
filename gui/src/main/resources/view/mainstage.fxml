@@ -3,6 +3,7 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
@@ -15,11 +16,13 @@
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="688.0" prefWidth="964.0" style="-fx-background-color: #dcdde1;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="688.0" prefWidth="964.0" style="-fx-background-color: #dcdde1;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.jemiahlabs.skrls.view.main.MainViewControllerImpl">
    <children>
+      <StackPane fx:id="stackpane" prefHeight="661.0" prefWidth="964.0" />
       <BorderPane prefHeight="678.0" prefWidth="922.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <left>
             <AnchorPane prefHeight="450.0" prefWidth="278.0" style="-fx-background-color: #a4b0be;" BorderPane.alignment="CENTER">
@@ -54,12 +57,12 @@
               <menus>
                 <Menu mnemonicParsing="false" text="File">
                   <items>
-                    <MenuItem mnemonicParsing="false" text="New Project">
+                    <MenuItem mnemonicParsing="false" onAction="#openViewNewProject" text="New Project">
                            <graphic>
                               <FontAwesomeIcon iconName="FOLDER" />
                            </graphic>
                         </MenuItem>
-                        <MenuItem mnemonicParsing="false" text="Open Project">
+                        <MenuItem mnemonicParsing="false" onAction="#openViewOpenProject" text="Open Project">
                            <graphic>
                               <FontAwesomeIcon iconName="FOLDER_OPEN" />
                            </graphic>
@@ -75,7 +78,7 @@
                 </Menu>
                   <Menu mnemonicParsing="false" text="Extensions">
                     <items>
-                      <MenuItem mnemonicParsing="false" text="Manage Extensions">
+                      <MenuItem mnemonicParsing="false" onAction="#openViewExtensions" text="Manage Extensions">
                            <graphic>
                               <FontAwesomeIcon iconName="PLUG" />
                            </graphic>
@@ -84,18 +87,18 @@
                   </Menu>
                 <Menu mnemonicParsing="false" text="Help">
                   <items>
-                    <MenuItem mnemonicParsing="false" text="About">
+                    <MenuItem mnemonicParsing="false" onAction="#openViewAboutMe" text="About">
                            <graphic>
                               <FontAwesomeIcon iconName="COMPASS" />
                            </graphic>
                         </MenuItem>
-                        <MenuItem mnemonicParsing="false" text="Documentation">
+                        <MenuItem mnemonicParsing="false" onAction="#openViewDocumentation" text="Documentation">
                            <graphic>
                               <FontAwesomeIcon iconName="BOOK" />
                            </graphic>
                         </MenuItem>
                         <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem mnemonicParsing="false" text="Source Code">
+                        <MenuItem mnemonicParsing="false" onAction="#openViewSourceCode" text="Source Code">
                            <graphic>
                               <FontAwesomeIcon iconName="GITHUB" />
                            </graphic>
@@ -129,18 +132,24 @@
                                     <Insets />
                                  </opaqueInsets>
                               </Label>
-                              <ComboBox prefHeight="26.0" prefWidth="370.0" />
+                              <ComboBox fx:id="cbFilterConsole" prefHeight="26.0" prefWidth="370.0" />
                               <Label accessibleRole="PARENT" prefHeight="18.0" prefWidth="327.0" />
-                              <JFXButton accessibleRole="PARENT" alignment="CENTER" ellipsisString="" layoutX="619.0" layoutY="10.0" prefHeight="26.0" prefWidth="6.0">
+                              <JFXButton accessibleRole="PARENT" alignment="CENTER" ellipsisString="" layoutX="619.0" layoutY="10.0" onAction="#clearConsole" prefHeight="26.0" prefWidth="6.0">
                                  <graphic>
-                                    <FontAwesomeIcon iconName="TRASH" />
-                                 </graphic></JFXButton>
+                                    <FontAwesomeIcon iconName="TRASH">
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor></FontAwesomeIcon>
+                                 </graphic>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor></JFXButton>
                            </items>
                            <padding>
                               <Insets left="10.0" />
                            </padding>
                         </ToolBar>
-                        <TextArea prefHeight="194.0" prefWidth="943.0" style="-fx-background-color: #ffffff;" />
+                        <TextArea fx:id="txtConsole" prefHeight="194.0" prefWidth="943.0" style="-fx-background-color: #ffffff;" />
                      </children>
                      <padding>
                         <Insets left="10.0" right="10.0" />
@@ -150,25 +159,34 @@
                      <children>
                         <ToolBar prefHeight="33.0" prefWidth="922.0">
                            <items>
-                              <Label text="0">
+                              <Label fx:id="txtWarningMessage" onMouseClicked="#openViewProblems" text="0">
                                  <font>
                                     <Font name="System Bold" size="14.0" />
                                  </font>
                                  <graphic>
                                     <FontAwesomeIcon iconName="EXCLAMATION_TRIANGLE" />
                                  </graphic>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
                               </Label>
-                              <Label text="0">
+                              <Label fx:id="txtInfoMessage" onMouseClicked="#openViewProblems" text="0">
                                  <font>
                                     <Font name="System Bold" size="14.0" />
                                  </font>
                                  <graphic>
                                     <FontAwesomeIcon iconName="EXCLAMATION_CIRCLE" />
                                  </graphic>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
                               </Label>
                               <AnchorPane prefHeight="26.0" prefWidth="558.0" />
-                              <Label prefHeight="18.0" prefWidth="283.0" text="Status:" />
-                              <FontAwesomeIcon iconName="COMMENTS" />
+                              <Label fx:id="txtStatus" prefHeight="18.0" prefWidth="283.0" text="Status:" />
+                              <FontAwesomeIcon iconName="COMMENTS" onMouseClicked="#openViewReport">
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor></FontAwesomeIcon>
                            </items>
                            <padding>
                               <Insets left="20.0" />
