@@ -15,8 +15,9 @@ public class WindowBuildDirector {
 		return director;
 	}
 	
-	public static Window createWindow(WindowBuildable windowBuildable) {
-		return windowBuildable.build();
+	public static Window createWindow(WindowBuildable windowBuildable) throws WindowBuildableException {
+		Optional<Window> optional = Optional.ofNullable(windowBuildable.build());
+		return optional.orElseThrow(() -> new WindowBuildableException("Error could not build window"));
 	}
 	
 	private WindowBuildDirector() {
