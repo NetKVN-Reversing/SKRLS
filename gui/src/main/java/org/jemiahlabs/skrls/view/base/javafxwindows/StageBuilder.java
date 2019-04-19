@@ -2,6 +2,8 @@ package org.jemiahlabs.skrls.view.base.javafxwindows;
 
 import java.io.IOException;
 
+import org.jemiahlabs.skrls.view.base.PrincipalWindow;
+import org.jemiahlabs.skrls.view.base.SubWindow;
 import org.jemiahlabs.skrls.view.base.Window;
 import org.jemiahlabs.skrls.view.base.WindowBuildable;
 
@@ -14,6 +16,7 @@ import javafx.stage.StageStyle;
 
 public class StageBuilder implements WindowBuildable {
 	private Stage stage;
+	private PrincipalWindow principalWindow;
 	private String fxmlLocation;
 	private String title;
 	private String iconLocation;
@@ -37,6 +40,11 @@ public class StageBuilder implements WindowBuildable {
 	
 	public StageBuilder setTitle(String title) {
 		this.title = title;
+		return this;
+	}
+	
+	public StageBuilder setPrincipalWindow(PrincipalWindow principalWindow) {
+		this.principalWindow = principalWindow;
 		return this;
 	}
 	
@@ -96,6 +104,9 @@ public class StageBuilder implements WindowBuildable {
 			window = new AbstractWindow(stage);
 			
 			StageController controller = (StageController) loader.getController();
+			
+			if(controller instanceof SubWindow) ((SubWindow) controller).setPrincipalWindow(principalWindow);  
+			
 			if(controller != null) controller.setWindow(window);
 			
 		} catch (IOException | IllegalArgumentException | SecurityException e) {
