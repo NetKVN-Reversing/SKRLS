@@ -13,6 +13,8 @@ import org.jemiahlabs.skrls.view.base.SubWindow;
 import org.jemiahlabs.skrls.view.base.Window;
 import org.jemiahlabs.skrls.view.base.WindowBuildDirector;
 import org.jemiahlabs.skrls.view.base.exceptions.WindowBuildableException;
+import org.jemiahlabs.skrls.view.problems.ProblemsViewBuilder;
+import org.jemiahlabs.skrls.view.report.ReportViewBuilder;
 
 import javafx.application.HostServices;
 import javafx.event.ActionEvent;
@@ -97,12 +99,28 @@ public class MainViewControllerImpl implements MainViewController, Initializable
     
     @FXML
     void openViewProblems(MouseEvent event) {
-
+    	disposeOpenWindowCurrent();
+		
+    	try {
+			openWindowCurrent = WindowBuildDirector.createWindow(new ProblemsViewBuilder(this));
+			openWindowCurrent.show();
+		} catch (WindowBuildableException e) {
+			warningMessages.add("Warning: " + LocalDate.now() + " - " + e.getMessage());
+			txtWarningMessage.setText("" + warningMessages.size());
+		}
     }
 
     @FXML
     void openViewReport(MouseEvent event) {
-
+    	disposeOpenWindowCurrent();
+		
+    	try {
+			openWindowCurrent = WindowBuildDirector.createWindow(new ReportViewBuilder(this));
+			openWindowCurrent.show();
+		} catch (WindowBuildableException e) {
+			warningMessages.add("Warning: " + LocalDate.now() + " - " + e.getMessage());
+			txtWarningMessage.setText("" + warningMessages.size());
+		}
     }
     
     @FXML

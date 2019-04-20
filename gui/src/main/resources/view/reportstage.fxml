@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="327.0" prefWidth="649.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="327.0" prefWidth="649.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.jemiahlabs.skrls.view.report.ReportViewControllerImpl">
    <children>
       <ToolBar prefHeight="43.0" prefWidth="642.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <items>
@@ -21,7 +21,7 @@
                </font>
             </Label>
             <AnchorPane prefHeight="43.0" prefWidth="490.0" />
-            <FontAwesomeIcon iconName="CLOSE" size="2em">
+            <FontAwesomeIcon iconName="CLOSE" onMouseClicked="#closeStage" size="2em">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
@@ -31,8 +31,8 @@
             <Insets left="20.0" />
          </padding>
       </ToolBar>
-      <TextArea layoutX="38.0" layoutY="153.0" prefHeight="92.0" prefWidth="580.0" />
-      <Button layoutX="516.0" layoutY="275.0" mnemonicParsing="false" style="-fx-background-color: #000000;" text="Send Report" textFill="WHITE">
+      <TextArea fx:id="txtMessage" layoutX="38.0" layoutY="153.0" prefHeight="92.0" prefWidth="580.0" />
+      <Button layoutX="516.0" layoutY="275.0" mnemonicParsing="false" onAction="#sendReport" style="-fx-background-color: #000000;" text="Send Report" textFill="WHITE">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
@@ -42,7 +42,7 @@
             <Font name="System Bold" size="14.0" />
          </font>
       </Label>
-      <TextField layoutX="38.0" layoutY="89.0" prefHeight="26.0" prefWidth="580.0" />
+      <TextField fx:id="txtEmail" layoutX="38.0" layoutY="89.0" prefHeight="26.0" prefWidth="580.0" />
       <Label layoutX="53.0" layoutY="125.0" text="Message:">
          <font>
             <Font name="System Bold" size="14.0" />
