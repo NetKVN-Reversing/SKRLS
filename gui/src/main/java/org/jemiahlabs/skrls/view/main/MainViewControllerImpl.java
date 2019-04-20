@@ -14,6 +14,7 @@ import org.jemiahlabs.skrls.view.base.Window;
 import org.jemiahlabs.skrls.view.base.WindowBuildDirector;
 import org.jemiahlabs.skrls.view.base.exceptions.WindowBuildableException;
 import org.jemiahlabs.skrls.view.extensions.ExtensionsViewBuilder;
+import org.jemiahlabs.skrls.view.newproject.NewProjectViewBuilder;
 import org.jemiahlabs.skrls.view.problems.ProblemsViewBuilder;
 import org.jemiahlabs.skrls.view.report.ReportViewBuilder;
 
@@ -72,7 +73,15 @@ public class MainViewControllerImpl implements MainViewController, Initializable
 	
 	@FXML
 	void openViewNewProject(ActionEvent event) {
-
+		disposeOpenWindowCurrent();
+		
+    	try {
+			openWindowCurrent = WindowBuildDirector.createWindow(new NewProjectViewBuilder(this));
+			openWindowCurrent.show();
+		} catch (WindowBuildableException e) {
+			warningMessages.add("Warning: " + LocalDate.now() + " - " + e.getMessage());
+			txtWarningMessage.setText("" + warningMessages.size());
+		}
 	}
 
 	@FXML

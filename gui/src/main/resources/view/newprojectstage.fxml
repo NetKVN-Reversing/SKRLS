@@ -3,36 +3,30 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXCheckBox?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="233.0" prefWidth="730.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="272.0" prefWidth="730.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.jemiahlabs.skrls.view.newproject.NewProjectViewControllerImpl">
    <children>
-      <Label layoutX="45.0" layoutY="19.0" text="New Project">
-         <font>
-            <Font name="System Bold" size="18.0" />
-         </font>
-         <graphic>
-            <FontAwesomeIcon iconName="CUBE" />
-         </graphic>
-      </Label>
       <Label layoutX="45.0" layoutY="72.0" text="Location:">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
       </Label>
-      <TextField layoutX="119.0" layoutY="69.0" prefHeight="26.0" prefWidth="500.0" />
-      <Button layoutX="541.0" layoutY="179.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="77.0" style="-fx-background-color: #000000;" text="Cancel" textFill="WHITE">
+      <TextField layoutX="146.0" layoutY="69.0" prefHeight="26.0" prefWidth="473.0" />
+      <Button layoutX="541.0" layoutY="219.0" mnemonicParsing="false" onAction="#cancelNewProjectStage" prefHeight="26.0" prefWidth="77.0" style="-fx-background-color: #000000;" text="Cancel" textFill="WHITE">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
       </Button>
-      <Button layoutX="450.0" layoutY="179.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="77.0" style="-fx-background-color: #000000;" text="Create" textFill="WHITE">
+      <Button layoutX="451.0" layoutY="219.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="77.0" style="-fx-background-color: #000000;" text="Create" textFill="WHITE">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
@@ -41,8 +35,11 @@
          <graphic>
             <FontAwesomeIcon iconName="FOLDER_OPEN" />
          </graphic>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
       </JFXButton>
-      <JFXCheckBox checkedColor="BLACK" layoutX="119.0" layoutY="105.0" selected="true" text="Create directory if it does not exist">
+      <JFXCheckBox checkedColor="BLACK" layoutX="146.0" layoutY="102.0" selected="true" text="Create directory if it does not exist">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
@@ -50,11 +47,40 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </JFXCheckBox>
-      <Label layoutX="45.0" layoutY="155.0" text="Target:">
+      <Label layoutX="45.0" layoutY="199.0" text="Target:">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
       </Label>
-      <ComboBox layoutX="119.0" layoutY="152.0" prefWidth="150.0" />
+      <ComboBox layoutX="146.0" layoutY="196.0" prefWidth="150.0" />
+      <Label layoutX="45.0" layoutY="143.0" text="Source Code:">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <TextField layoutX="146.0" layoutY="140.0" prefHeight="26.0" prefWidth="473.0" />
+      <JFXButton layoutX="620.0" layoutY="140.0" text="Open">
+         <graphic>
+            <FontAwesomeIcon iconName="FOLDER_OPEN" />
+         </graphic>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </JFXButton>
+      <ToolBar layoutY="-6.0" prefHeight="48.0" prefWidth="730.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <items>
+            <Label text="New Project">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+               <graphic>
+                  <FontAwesomeIcon iconName="CUBE" />
+               </graphic>
+            </Label>
+         </items>
+         <padding>
+            <Insets left="20.0" />
+         </padding>
+      </ToolBar>
    </children>
 </AnchorPane>
