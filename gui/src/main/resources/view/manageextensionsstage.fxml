@@ -2,6 +2,7 @@
 
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
@@ -13,17 +14,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="397.0" prefWidth="928.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="397.0" prefWidth="807.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.jemiahlabs.skrls.view.extensions.ExtensionsViewControllerImpl">
    <children>
-      <Label layoutX="34.0" layoutY="30.0" prefHeight="18.0" prefWidth="230.0" text="Manage Extensions">
-         <font>
-            <Font name="System Bold" size="18.0" />
-         </font>
-         <graphic>
-            <FontAwesomeIcon iconName="PLUG" />
-         </graphic>
-      </Label>
-      <VBox layoutX="34.0" layoutY="82.0" prefHeight="281.0" prefWidth="359.0" style="-fx-background-color: #ced6e0;" AnchorPane.bottomAnchor="35.39999999999998" AnchorPane.leftAnchor="34.00000000000006" AnchorPane.rightAnchor="534.8" AnchorPane.topAnchor="82.0">
+      <VBox layoutX="34.0" layoutY="82.0" prefHeight="280.0" prefWidth="262.0" style="-fx-background-color: #ced6e0;" AnchorPane.bottomAnchor="35.0" AnchorPane.leftAnchor="34.0" AnchorPane.rightAnchor="511.0" AnchorPane.topAnchor="82.0">
          <children>
             <ToolBar prefHeight="40.0" prefWidth="200.0">
                <items>
@@ -39,9 +32,9 @@
             </ToolBar>
             <ScrollPane prefHeight="242.0" prefWidth="360.0">
               <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="234.0" prefWidth="359.0">
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="234.0" prefWidth="263.0">
                      <children>
-                        <AnchorPane prefHeight="40.0" prefWidth="345.0" style="-fx-background-color: #ced6e0;">
+                        <AnchorPane prefHeight="40.0" prefWidth="265.0" style="-fx-background-color: #ced6e0;">
                            <children>
                               <ImageView fitHeight="27.0" fitWidth="30.0" layoutX="14.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -57,7 +50,12 @@
             </ScrollPane>
          </children>
       </VBox>
-      <VBox layoutX="514.0" layoutY="82.0" prefHeight="281.0" prefWidth="359.0" style="-fx-background-color: #ced6e0;" AnchorPane.bottomAnchor="35.39999999999998" AnchorPane.leftAnchor="514.0" AnchorPane.rightAnchor="54.80000000000001" AnchorPane.topAnchor="82.0">
+      <Button layoutX="320.0" layoutY="117.0" mnemonicParsing="false" onAction="#addExtensionsEvent" prefHeight="26.0" prefWidth="72.0" style="-fx-background-color: #000000;" text="Add" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Button>
+      <VBox layoutX="417.0" layoutY="81.0" prefHeight="281.0" prefWidth="359.0" style="-fx-background-color: #ced6e0;">
          <children>
             <ToolBar prefHeight="40.0" prefWidth="200.0">
                <items>
@@ -178,15 +176,30 @@
             </ScrollPane>
          </children>
       </VBox>
-      <Button layoutX="419.0" layoutY="126.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="72.0" style="-fx-background-color: #000000;" text="Add" textFill="WHITE">
+      <Button layoutX="320.0" layoutY="157.0" mnemonicParsing="false" onAction="#removeExtensionsEvent" prefHeight="26.0" prefWidth="72.0" style="-fx-background-color: #000000;" text="Remove" textFill="WHITE">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
       </Button>
-      <Button layoutX="419.0" layoutY="173.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="72.0" style="-fx-background-color: #000000;" text="Remove" textFill="WHITE">
-         <font>
-            <Font name="System Bold" size="12.0" />
-         </font>
-      </Button>
+      <ToolBar prefHeight="40.0" prefWidth="833.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <items>
+            <Label prefHeight="27.0" prefWidth="754.0" text="Manage Extensions">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+               <graphic>
+                  <FontAwesomeIcon iconName="PLUG" />
+               </graphic>
+            </Label>
+            <FontAwesomeIcon iconName="CLOSE" onMouseClicked="#closeStage" size="2em">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </FontAwesomeIcon>
+         </items>
+         <padding>
+            <Insets left="20.0" />
+         </padding>
+      </ToolBar>
    </children>
 </AnchorPane>
