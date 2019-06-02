@@ -1,2 +1,5 @@
 parent.iml
 .idea/
+gui/gui.iml
+cli/cli.iml
+cli/target/
