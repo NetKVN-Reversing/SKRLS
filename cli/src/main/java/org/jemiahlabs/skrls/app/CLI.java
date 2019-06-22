@@ -44,6 +44,7 @@ public class CLI {
             cmdWithOpts = ArgumentsParser.getInstance().parse(args);
         }catch(ParseException e){
             System.out.println(e.getMessage());
+            System.exit(1);
         }
         return cmdWithOpts;
     }
