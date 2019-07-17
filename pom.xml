@@ -7,7 +7,10 @@
   <groupId>org.jemiahlabs.skrls</groupId>
   <artifactId>parent</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <packaging>pom</packaging>
+    <modules>
+        <module>cli</module>
+    </modules>
+    <packaging>pom</packaging>
   <name>Software for the recovery of knowledge of legacy systems</name>
  
   <!-- Implementations
