@@ -6,7 +6,7 @@
 	<packaging>jar</packaging>
 
 	<name>SKRLS - Application with user interfaces</name>
-	<url>https://github.com/jemiah-labs/SKRLS/GUI</url>
+	<url>https://github.com/jemiah-labs/SKRLS</url>
 
 	<parent>
 		<groupId>org.jemiahlabs.skrls</groupId>

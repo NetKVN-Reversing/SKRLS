@@ -18,7 +18,7 @@ public class EventArgs {
 		arguments.put(key, value);
 	}
 	
-	public void adArgument(Map<String, Object> args) {
+	public void addArgument(Map<String, Object> args) {
 		arguments.putAll(args);
 	}
 	
