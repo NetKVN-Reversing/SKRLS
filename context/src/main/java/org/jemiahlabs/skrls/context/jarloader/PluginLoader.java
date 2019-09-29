@@ -4,92 +4,125 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
 
 import org.jemiahlabs.skrls.context.Plugin;
 import org.jemiahlabs.skrls.context.exceptions.AbortivedPluginLoadException;
+import org.jemiahlabs.skrls.context.exceptions.PluginsNotLoadException;
 import org.jemiahlabs.skrls.core.ExtractableKnowledge;
 import org.jemiahlabs.skrls.core.Nameable;
 
 public class PluginLoader {
-	public final static String PLUGINS_DIRECTORY = System.getProperty("user.dir") + "skrlsplugins";
-	public final static String CLASSPATH = "org.jemiahlabs.skrls.plugin";
-	
-	private final Class<Nameable> nameableClass;
-	private final Class<ExtractableKnowledge> extractableKnowledgeClass;
+	public final static String PLUGINS_DIRECTORY = System.getProperty("user.home") + System.getProperty("file.separator") + "skrlsplugins";
 	
 	public static Plugin createPlugin(Nameable nameable, ExtractableKnowledge extractableKnowledgeClass) {
 		return new Plugin(nameable, extractableKnowledgeClass);
 	}
 
 	public PluginLoader() {
-		this.nameableClass = Nameable.class;
-		this.extractableKnowledgeClass = ExtractableKnowledge.class;
+		
 	}
 	
-	public void createPluginsDirectory() throws IOException {
-		Files.createDirectory(Paths.get(PLUGINS_DIRECTORY));
-	}
-	
-	public Plugin loadPlugin(File fileJar) throws AbortivedPluginLoadException {
+	public Plugin loadPlugin(File fileJar, boolean isNewPlugin) throws AbortivedPluginLoadException {
 		try {
-			copyJarFileToPluginsDirectory(fileJar);
+			if(isNewPlugin)
+				copyJarFileToPluginsDirectory(fileJar);
+			
 			return resolvePlugin(fileJar);
 			
 		} catch (IOException e) {
-			throw new AbortivedPluginLoadException(e.getMessage(), e.getCause());
+			throw new AbortivedPluginLoadException(e.toString(), e.getCause());
 		} catch (ClassNotFoundException e) {
-			throw new AbortivedPluginLoadException(e.getMessage(), e.getCause());
+			throw new AbortivedPluginLoadException(e.toString(), e.getCause());
 		} catch (NoSuchMethodException e) {
-			throw new AbortivedPluginLoadException(e.getMessage(), e.getCause());
+			throw new AbortivedPluginLoadException(e.toString(), e.getCause());
 		} catch (SecurityException e) {
-			throw new AbortivedPluginLoadException(e.getMessage(), e.getCause());
+			throw new AbortivedPluginLoadException(e.toString(), e.getCause());
 		} catch (InstantiationException e) {
-			throw new AbortivedPluginLoadException(e.getMessage(), e.getCause());
+			throw new AbortivedPluginLoadException(e.toString(), e.getCause());
 		} catch (IllegalAccessException e) {
-			throw new AbortivedPluginLoadException(e.getMessage(), e.getCause());
+			throw new AbortivedPluginLoadException(e.toString(), e.getCause());
 		} catch (IllegalArgumentException e) {
-			throw new AbortivedPluginLoadException(e.getMessage(), e.getCause());
+			throw new AbortivedPluginLoadException(e.toString(), e.getCause());
 		} catch (InvocationTargetException e) {
-			throw new AbortivedPluginLoadException(e.getMessage(), e.getCause());
+			throw new AbortivedPluginLoadException(e.toString(), e.getCause());
+		} catch (NullPointerException e) {
+			throw new AbortivedPluginLoadException(e.toString(), e.getCause());
 		}
 	}
 	
-	private Plugin resolvePlugin(File fileJar) throws MalformedURLException, ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	public List<Plugin> loadPlugins() throws PluginsNotLoadException {
+		File pluginsDir = new File(PLUGINS_DIRECTORY);
+		List<Plugin> pluginsCorrect = new ArrayList<Plugin>();
+		
+		if(!pluginsDir.exists() || !pluginsDir.isDirectory() )
+			throw new PluginsNotLoadException("Not have plugins for load");
+		
+		for (File fileJar : pluginsDir.listFiles()) {
+			try {
+				Plugin plugin = loadPlugin(fileJar, false);
+				pluginsCorrect.add(plugin);
+				
+			} catch (AbortivedPluginLoadException e) {
+				System.out.println(e.getMessage());
+				continue;
+			}
+		}
+		
+		return pluginsCorrect;
+	}
+	
+	private void copyJarFileToPluginsDirectory(File fileJar) throws IOException {
+		File pluginsDir = new File(PLUGINS_DIRECTORY);
+		if (!pluginsDir.exists()) 
+			Files.createDirectories(pluginsDir.toPath());
+		
+        Files.copy(fileJar.toPath(), 
+        	Paths.get(PLUGINS_DIRECTORY, System.getProperty("file.separator"), fileJar.getName()), 
+        	StandardCopyOption.REPLACE_EXISTING
+        );
+	}
+	
+	private Plugin resolvePlugin(File fileJar) throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, IOException, NullPointerException {
 		ClassLoader loader = loadJar(fileJar);
+		Properties properties = loadProperties(loader);
 		
-		return findSubClass(loader);
-	}
-	
-	private ClassLoader loadJar(File fileJar) throws MalformedURLException {
-		ClassLoader loader = URLClassLoader.newInstance(
-			new URL[] { fileJar.toURL() },
-			getClass().getClassLoader()
-		);
+		Constructor<? extends Nameable> constructorNameable 
+			= findSubClass(loader, properties.getProperty("plugin.package.info"), Nameable.class)
+				.getConstructor();
 		
-		return loader;
-	}
-	
-	private Plugin findSubClass(ClassLoader loader) throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		Class<?> clazz = Class.forName(CLASSPATH, true, loader);
-		Class<? extends Nameable> newClassNameable = clazz.asSubclass(nameableClass);
-		Class<? extends ExtractableKnowledge> newClassExtractableKnowledge = clazz.asSubclass(extractableKnowledgeClass);
-		
-		Constructor<? extends Nameable> constructorNameable = newClassNameable.getConstructor();
-		Constructor<? extends ExtractableKnowledge> constructorExtractableKnowledge = newClassExtractableKnowledge.getConstructor();
+		Constructor<? extends ExtractableKnowledge> constructorExtractableKnowledge
+			= findSubClass(loader, properties.getProperty("plugin.package.parser"), ExtractableKnowledge.class)
+				.getConstructor();
 		
 		return createPlugin(constructorNameable.newInstance(), constructorExtractableKnowledge.newInstance());
 	}
 	
-	private void copyJarFileToPluginsDirectory(File fileJar) throws IOException {
-        Path destination = Paths.get(PLUGINS_DIRECTORY);
-        Files.copy(fileJar.toPath(), destination, StandardCopyOption.REPLACE_EXISTING);
+	private Properties loadProperties(ClassLoader loader) throws IOException {
+		Properties properties = new Properties();
+		properties.load(loader.getResourceAsStream("plugin.properties"));
+		
+		return properties;
+	}
+	
+	private ClassLoader loadJar(File fileJar) throws IOException, ClassNotFoundException {
+		return URLClassLoader.newInstance(
+			new URL[] { fileJar.toURI().toURL() },
+			getClass().getClassLoader()
+		);
+	}
+	
+	private <T> Class<? extends T> findSubClass(ClassLoader loader, String location, Class<T> typeClass) throws ClassNotFoundException {
+		Class<?> clazz = Class.forName(location, true, loader);
+		Class<? extends T> newClass = clazz.asSubclass(typeClass);
+		return newClass;
 	}
 	
 }

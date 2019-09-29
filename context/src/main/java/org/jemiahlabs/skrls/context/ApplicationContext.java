@@ -2,12 +2,14 @@ package org.jemiahlabs.skrls.context;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Hashtable;
 import java.util.List;
 
 import org.jemiahlabs.skrls.context.events.FailedCase;
 import org.jemiahlabs.skrls.context.events.SuccessCase;
 import org.jemiahlabs.skrls.context.exceptions.AbortivedPluginLoadException;
+import org.jemiahlabs.skrls.context.exceptions.PluginsNotLoadException;
 import org.jemiahlabs.skrls.context.jarloader.PluginLoader;
 import org.jemiahlabs.skrls.core.Nameable;
 import org.jemiahlabs.skrls.core.Receiver;
@@ -36,10 +38,12 @@ public class ApplicationContext {
 		try {
 			File fileJar = new File(uri);
 			
-			if(!fileJar.exists() || !fileJar.isFile())
-				failedCase.failed(new AbortivedPluginLoadException("File jar not exists"), uri);
+			if(!fileJar.exists() || !fileJar.isFile()) {
+				failedCase.failed(new AbortivedPluginLoadException("File jar not exists: " + fileJar.getPath()), uri);
+				return;
+			}
 			
-			Plugin plugin = pluginLoader.loadPlugin(fileJar);
+			Plugin plugin = pluginLoader.loadPlugin(fileJar, true);
 			
 			plugins.put(plugin.getNameable(), plugin);
 			successCase.success(plugin);
@@ -53,21 +57,15 @@ public class ApplicationContext {
 		plugins.remove(nameable);
 	}
 	
-	public void LoaderPlugins(SuccessCase<Plugin> successCase, FailedCase<AbortivedPluginLoadException, String> failedCase) {
-		File pluginsDir = new File(PluginLoader.PLUGINS_DIRECTORY);
-		
-		if (!pluginsDir.exists())
-			pluginsDir.mkdir();
+	public void LoaderPlugins(SuccessCase<List<Plugin>> successCase, FailedCase<PluginsNotLoadException, String> failedCase) {
+		try {
+			List<Plugin> pluginsCorrect = pluginLoader.loadPlugins();
 			
-		for (File fileJar : pluginsDir.listFiles()) {
-			try {
-				Plugin plugin = pluginLoader.loadPlugin(fileJar);
-				
-				plugins.put(plugin.getNameable(), plugin);
-				successCase.success(plugin);
-			} catch (AbortivedPluginLoadException e) {
-				failedCase.failed(e, fileJar.getName());
-			}
+			pluginsCorrect.forEach((plugin) -> plugins.put(plugin.getNameable(), plugin));
+			successCase.success(Collections.unmodifiableList(pluginsCorrect));
+			
+		} catch (PluginsNotLoadException e) {
+			failedCase.failed(e, e.getMessage());
 		}
 	}
 	
