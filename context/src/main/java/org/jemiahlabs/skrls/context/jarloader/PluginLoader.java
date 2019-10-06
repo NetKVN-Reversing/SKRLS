@@ -55,7 +55,10 @@ public class PluginLoader {
 			throw new AbortivedPluginLoadException(e.toString(), e.getCause());
 		} catch (NullPointerException e) {
 			throw new AbortivedPluginLoadException(e.toString(), e.getCause());
+		} catch (ArrayIndexOutOfBoundsException e) {
+			throw new AbortivedPluginLoadException("File is not type .jar", e.getCause());
 		}
+		
 	}
 	
 	public List<Plugin> loadPlugins() throws PluginsNotLoadException {
@@ -65,29 +68,67 @@ public class PluginLoader {
 		if(!pluginsDir.exists() || !pluginsDir.isDirectory() )
 			throw new PluginsNotLoadException("Not have plugins for load");
 		
-		for (File fileJar : pluginsDir.listFiles()) {
-			try {
-				Plugin plugin = loadPlugin(fileJar, false);
-				pluginsCorrect.add(plugin);
+		for (File folderPlugin : pluginsDir.listFiles()) {
+			for (File fileJar: folderPlugin.listFiles( (file) -> file.getName().endsWith(".jar") )) {
+				try {
+					Plugin plugin = loadPlugin(fileJar, false);
+					pluginsCorrect.add(plugin);
 				
-			} catch (AbortivedPluginLoadException e) {
-				System.out.println(e.getMessage());
-				continue;
+				} catch (AbortivedPluginLoadException e) {
+					System.out.println(e.getMessage());
+					continue;
+				}
 			}
 		}
 		
 		return pluginsCorrect;
 	}
 	
-	private void copyJarFileToPluginsDirectory(File fileJar) throws IOException {
-		File pluginsDir = new File(PLUGINS_DIRECTORY);
+	private void copyJarFileToPluginsDirectory(File fileJar) throws IOException, ArrayIndexOutOfBoundsException {
+		File pluginsDir = copyPluginToPluginsDirectory(fileJar);
+		copyPluginDependeciesToPluginsDirectory(fileJar, pluginsDir);
+	}
+	
+	private File copyPluginToPluginsDirectory(File fileJar) throws IOException, ArrayIndexOutOfBoundsException {
+		String folderInside = fileJar.getName().split("\\.jar")[0];
+		File pluginsDir = new File(PLUGINS_DIRECTORY + System.getProperty("file.separator") + folderInside);
+		
 		if (!pluginsDir.exists()) 
 			Files.createDirectories(pluginsDir.toPath());
 		
-        Files.copy(fileJar.toPath(), 
-        	Paths.get(PLUGINS_DIRECTORY, System.getProperty("file.separator"), fileJar.getName()), 
+        Files.copy(
+        	fileJar.toPath(), 
+        	Paths.get(pluginsDir.getAbsolutePath(), System.getProperty("file.separator"), fileJar.getName()), 
         	StandardCopyOption.REPLACE_EXISTING
         );
+        
+        return pluginsDir;
+	}
+	
+	private void copyPluginDependeciesToPluginsDirectory(File fileJar, File pluginsDir) throws IOException {
+		File pluginDependecies = new File(fileJar.getParent() + System.getProperty("file.separator") + "lib");
+        
+        if(!pluginDependecies.exists() || !pluginDependecies.isDirectory())
+        	return;
+        
+        Files.copy(
+        	pluginDependecies.toPath(), 
+            Paths.get(pluginsDir.getAbsolutePath(), System.getProperty("file.separator"), pluginDependecies.getName()), 
+            StandardCopyOption.REPLACE_EXISTING
+        );
+        
+        for (File fileDependence : pluginDependecies.listFiles()) {
+        	Files.copy(
+        		fileDependence.toPath(), 
+                Paths.get(pluginsDir.getAbsolutePath(), 
+                	System.getProperty("file.separator"), 
+                	pluginDependecies.getName(), 
+                	System.getProperty("file.separator"), 
+                	fileDependence.getName()
+                ), 
+                StandardCopyOption.REPLACE_EXISTING
+            );
+		}
 	}
 	
 	private Plugin resolvePlugin(File fileJar) throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, IOException, NullPointerException {
