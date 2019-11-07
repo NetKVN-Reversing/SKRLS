@@ -10,6 +10,4 @@ public abstract class Channel implements Interlocutor {
 	protected Receiver getReceiver() {
 		return receiver;
 	}
-	
-	public abstract void addProducer(Producer producer);
 }
