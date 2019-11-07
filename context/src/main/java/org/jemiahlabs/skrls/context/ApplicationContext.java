@@ -19,6 +19,7 @@ public class ApplicationContext {
 	
 	private PluginLoader pluginLoader;
 	private Hashtable<Nameable, Plugin> plugins;
+	private Receiver receiver;
 	
 	public static ApplicationContext GetNewInstance(Receiver receiver) {
 		context = new ApplicationContext(receiver);
@@ -32,6 +33,7 @@ public class ApplicationContext {
 	private ApplicationContext(Receiver receiver) {
 		pluginLoader = new PluginLoader();
 		plugins = new Hashtable<Nameable, Plugin>(5);
+		this.receiver = receiver;
 	}
 	
 	public void addPlugin(String uri, SuccessCase<Plugin> successCase, FailedCase<AbortivedPluginLoadException, String> failedCase) {
@@ -79,6 +81,14 @@ public class ApplicationContext {
 	
 	public List<Nameable> getNamePlugins() {
 		return new ArrayList<Nameable>();
+	}
+
+	public Receiver getReceiver() {
+		return receiver;
+	}
+
+	public void setReceiver(Receiver receiver) {
+		this.receiver = receiver;
 	}
 	
 }

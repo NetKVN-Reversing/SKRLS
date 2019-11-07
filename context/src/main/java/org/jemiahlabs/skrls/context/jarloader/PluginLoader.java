@@ -57,8 +57,9 @@ public class PluginLoader {
 			throw new AbortivedPluginLoadException(e.toString(), e.getCause());
 		} catch (ArrayIndexOutOfBoundsException e) {
 			throw new AbortivedPluginLoadException("File is not type .jar", e.getCause());
+		} catch (Exception e) {
+			throw new AbortivedPluginLoadException(e.toString(), e.getCause());
 		}
-		
 	}
 	
 	public List<Plugin> loadPlugins() throws PluginsNotLoadException {
@@ -111,19 +112,21 @@ public class PluginLoader {
         if(!pluginDependecies.exists() || !pluginDependecies.isDirectory())
         	return;
         
-        Files.copy(
-        	pluginDependecies.toPath(), 
-            Paths.get(pluginsDir.getAbsolutePath(), System.getProperty("file.separator"), pluginDependecies.getName()), 
-            StandardCopyOption.REPLACE_EXISTING
-        );
+        File pathDestination = new File(pluginsDir.getAbsolutePath() + System.getProperty("file.separator") + pluginDependecies.getName());
+        if(!pathDestination.exists()) {
+        	Files.copy(
+                pluginDependecies.toPath(), 
+                pathDestination.toPath(), 
+                StandardCopyOption.REPLACE_EXISTING
+            );
+        }
         
         for (File fileDependence : pluginDependecies.listFiles()) {
         	Files.copy(
         		fileDependence.toPath(), 
-                Paths.get(pluginsDir.getAbsolutePath(), 
-                	System.getProperty("file.separator"), 
-                	pluginDependecies.getName(), 
-                	System.getProperty("file.separator"), 
+                Paths.get(
+                	pathDestination.getAbsolutePath(), 
+                	System.getProperty("file.separator"),
                 	fileDependence.getName()
                 ), 
                 StandardCopyOption.REPLACE_EXISTING
