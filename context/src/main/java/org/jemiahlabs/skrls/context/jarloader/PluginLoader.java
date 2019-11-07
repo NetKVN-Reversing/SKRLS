@@ -32,33 +32,37 @@ public class PluginLoader {
 	
 	public Plugin loadPlugin(File fileJar, boolean isNewPlugin) throws AbortivedPluginLoadException {
 		try {
+			Plugin pluginLoaded = resolvePlugin(fileJar);
+			
 			if(isNewPlugin)
 				copyJarFileToPluginsDirectory(fileJar);
 			
-			return resolvePlugin(fileJar);
+			return pluginLoaded;
 			
 		} catch (IOException e) {
-			throw new AbortivedPluginLoadException(e.toString(), e.getCause());
+			throw new AbortivedPluginLoadException(e.getMessage(), e.getCause());
 		} catch (ClassNotFoundException e) {
-			throw new AbortivedPluginLoadException(e.toString(), e.getCause());
+			throw new AbortivedPluginLoadException(e.getMessage(), e.getCause());
 		} catch (NoSuchMethodException e) {
-			throw new AbortivedPluginLoadException(e.toString(), e.getCause());
+			throw new AbortivedPluginLoadException(e.getMessage(), e.getCause());
 		} catch (SecurityException e) {
-			throw new AbortivedPluginLoadException(e.toString(), e.getCause());
+			throw new AbortivedPluginLoadException(e.getMessage(), e.getCause());
 		} catch (InstantiationException e) {
-			throw new AbortivedPluginLoadException(e.toString(), e.getCause());
+			throw new AbortivedPluginLoadException(e.getMessage(), e.getCause());
 		} catch (IllegalAccessException e) {
-			throw new AbortivedPluginLoadException(e.toString(), e.getCause());
+			throw new AbortivedPluginLoadException(e.getMessage(), e.getCause());
 		} catch (IllegalArgumentException e) {
-			throw new AbortivedPluginLoadException(e.toString(), e.getCause());
+			throw new AbortivedPluginLoadException(e.getMessage(), e.getCause());
 		} catch (InvocationTargetException e) {
-			throw new AbortivedPluginLoadException(e.toString(), e.getCause());
+			throw new AbortivedPluginLoadException(e.getMessage(), e.getCause());
 		} catch (NullPointerException e) {
-			throw new AbortivedPluginLoadException(e.toString(), e.getCause());
+			throw new AbortivedPluginLoadException(e.getMessage(), e.getCause());
 		} catch (ArrayIndexOutOfBoundsException e) {
 			throw new AbortivedPluginLoadException("File is not type .jar", e.getCause());
 		} catch (Exception e) {
-			throw new AbortivedPluginLoadException(e.toString(), e.getCause());
+			throw new AbortivedPluginLoadException(e.getMessage(), e.getCause());
+		} catch(NoClassDefFoundError e) {
+			throw new AbortivedPluginLoadException(e.getMessage(), e.getCause());
 		}
 	}
 	
