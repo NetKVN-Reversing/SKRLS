@@ -1,23 +1,14 @@
 package org.jemiahlabs.skrls.core;
 
 public abstract class Producer {
-	private Interlocutor interlocutor;
-	private String topic;
+	private Channel channel;
 	
-	public Producer(Interlocutor interlocutor) {
-		this.interlocutor = interlocutor;
+	public Producer(Channel channel) {
+		this.channel = channel;
 	}
 	
-	protected Interlocutor getInterlocutor() {
-		return interlocutor;
-	}
-	
-	public String getTopic() {
-		return topic;
-	}
-
-	public void setTopic(String topic) {
-		this.topic = topic;
+	protected Channel getChannel() {
+		return channel;
 	}
 
 	public abstract void emitInfoMessage(String text);

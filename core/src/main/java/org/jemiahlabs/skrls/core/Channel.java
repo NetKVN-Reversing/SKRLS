@@ -1,6 +1,6 @@
 package org.jemiahlabs.skrls.core;
 
-public abstract class Channel implements Interlocutor {
+public abstract class Channel {
 	private Receiver receiver;
 	
 	public Channel(Receiver receiver) {
@@ -10,4 +10,6 @@ public abstract class Channel implements Interlocutor {
 	protected Receiver getReceiver() {
 		return receiver;
 	}
+	
+	public abstract void sendMessage(Message message);
 }
