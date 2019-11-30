@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import org.jemiahlabs.skrls.gui.ApplicationContext;
+import org.jemiahlabs.skrls.gui.ApplicationServiceProvider;
 import org.jemiahlabs.skrls.view.aboutme.AboutMeViewBuilder;
 import org.jemiahlabs.skrls.view.base.EventArgs;
 import org.jemiahlabs.skrls.view.base.SubWindow;
@@ -152,13 +152,13 @@ public class MainViewControllerImpl implements MainViewController, Initializable
     
     @FXML
     void openViewDocumentation(ActionEvent event) {
-    	HostServices services = (HostServices) ApplicationContext.getInstance().getAttribute("host-services");
+    	HostServices services = (HostServices) ApplicationServiceProvider.getInstance().getAttribute("host-services");
     	services.showDocument("https://github.com/jemiah-labs/SKRLS/tree/master/gui/docs");
     }
 
     @FXML
     void openViewSourceCode(ActionEvent event) {
-    	HostServices services = (HostServices) ApplicationContext.getInstance().getAttribute("host-services");
+    	HostServices services = (HostServices) ApplicationServiceProvider.getInstance().getAttribute("host-services");
     	services.showDocument("https://github.com/jemiah-labs/SKRLS");
     }
 }

@@ -14,8 +14,8 @@ public class App extends Application
     
     @Override
 	public void init() throws Exception {
-		ApplicationContext context = ApplicationContext.getInstance();
-		context.addAttribute("host-services", getHostServices());
+    	ApplicationServiceProvider appService = ApplicationServiceProvider.getInstance();
+    	appService.addAttribute("host-services", getHostServices());
 	}
 
 	@Override

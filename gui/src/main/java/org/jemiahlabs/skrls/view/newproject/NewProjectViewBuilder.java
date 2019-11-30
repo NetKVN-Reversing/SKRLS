@@ -1,6 +1,6 @@
 package org.jemiahlabs.skrls.view.newproject;
 
-import org.jemiahlabs.skrls.gui.ApplicationContext;
+import org.jemiahlabs.skrls.gui.ApplicationServiceProvider;
 import org.jemiahlabs.skrls.view.base.PrincipalWindow;
 import org.jemiahlabs.skrls.view.base.Window;
 import org.jemiahlabs.skrls.view.base.WindowBuildable;
@@ -15,11 +15,11 @@ public class NewProjectViewBuilder implements WindowBuildable {
 
 	@Override
 	public Window build() {
-		var appContext = ApplicationContext.getInstance();
+		var appService = ApplicationServiceProvider.getInstance();
 		StageBuilder builder = new StageBuilder("/view/newprojectstage.fxml");
 		
-		return builder.setTitle(appContext.getName() + "-New Project")
-			.setIcon(appContext.getIcon())
+		return builder.setTitle(appService.getName() + "-New Project")
+			.setIcon(appService.getIcon())
 			.setPrincipalWindow(principalWindow)
 			.undecorated()
 			.build();

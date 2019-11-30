@@ -3,8 +3,8 @@ package org.jemiahlabs.skrls.gui;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ApplicationContext {
-	private static ApplicationContext application = new ApplicationContext();
+public class ApplicationServiceProvider {
+	private static ApplicationServiceProvider application = new ApplicationServiceProvider();
 	
 	private final String name = "SKRLS";
 	private final String description = "";
@@ -13,11 +13,11 @@ public class ApplicationContext {
 	
 	private Map<String, Object> attributes;
 	
-	public static ApplicationContext getInstance() {
+	public static ApplicationServiceProvider getInstance() {
 		return application;
 	}
 	
-	private ApplicationContext() {
+	private ApplicationServiceProvider() {
 		attributes = new HashMap<String, Object>();
 	}
 	
