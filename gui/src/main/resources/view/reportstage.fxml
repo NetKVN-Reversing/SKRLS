@@ -8,14 +8,18 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="327.0" prefWidth="649.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.jemiahlabs.skrls.view.report.ReportViewControllerImpl">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="327.0" prefWidth="677.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.jemiahlabs.skrls.view.report.ReportViewControllerImpl">
    <children>
+      <StackPane fx:id="stackPane" onMouseClicked="#onCloseStackPane" prefHeight="327.0" prefWidth="650.0" />
       <ToolBar prefHeight="43.0" prefWidth="642.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <items>
-            <Label text="Report SKRLS">
+            <ImageView fx:id="lblLoad" fitHeight="30.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true" />
+            <Label text="Crash Reporting">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
@@ -31,18 +35,28 @@
             <Insets left="20.0" />
          </padding>
       </ToolBar>
-      <TextArea fx:id="txtMessage" layoutX="38.0" layoutY="153.0" prefHeight="92.0" prefWidth="580.0" />
-      <Button layoutX="516.0" layoutY="275.0" mnemonicParsing="false" onAction="#sendReport" style="-fx-background-color: #000000;" text="Send Report" textFill="WHITE">
+      <TextArea fx:id="txtMessage" focusTraversable="false" layoutX="38.0" layoutY="153.0" prefHeight="92.0" prefWidth="580.0">
+         <cursor>
+            <Cursor fx:constant="TEXT" />
+         </cursor>
+      </TextArea>
+      <Button fx:id="btnSendReport" layoutX="516.0" layoutY="275.0" mnemonicParsing="false" onAction="#sendReport" style="-fx-background-color: #000000;" text="Send Report" textFill="WHITE">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
       </Button>
       <Label layoutX="53.0" layoutY="61.0" text="Email:">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
       </Label>
-      <TextField fx:id="txtEmail" layoutX="38.0" layoutY="89.0" prefHeight="26.0" prefWidth="580.0" />
+      <TextField fx:id="txtEmail" focusTraversable="false" layoutX="38.0" layoutY="89.0" prefHeight="26.0" prefWidth="580.0">
+         <cursor>
+            <Cursor fx:constant="TEXT" />
+         </cursor></TextField>
       <Label layoutX="53.0" layoutY="125.0" text="Message:">
          <font>
             <Font name="System Bold" size="14.0" />
