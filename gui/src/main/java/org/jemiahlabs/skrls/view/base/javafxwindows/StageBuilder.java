@@ -102,7 +102,10 @@ public class StageBuilder implements WindowBuildable {
 			if (iconLocation != null) stage.getIcons().add(new Image(iconLocation));
 			
 			StageController controller = (StageController) loader.getController();
-			window = new AbstractWindow(stage, controller);					
+			window = new AbstractWindow(stage, controller);
+			stage.setOnCloseRequest(e -> {
+				controller.beforeClose();
+			});
 			
 			if(controller instanceof SubWindow) ((SubWindow) controller).setPrincipalWindow(principalWindow);  
 			

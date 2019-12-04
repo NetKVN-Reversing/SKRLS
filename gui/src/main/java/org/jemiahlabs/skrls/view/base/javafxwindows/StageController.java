@@ -7,4 +7,5 @@ public interface StageController {
 	void setWindow(Window window);
 	
 	default void receive(EventArgs args) {}
+	default void beforeClose() {}
 }
