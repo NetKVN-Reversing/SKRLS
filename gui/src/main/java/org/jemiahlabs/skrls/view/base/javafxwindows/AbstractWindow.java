@@ -1,27 +1,22 @@
 package org.jemiahlabs.skrls.view.base.javafxwindows;
 
-import java.util.Map;
-
+import org.jemiahlabs.skrls.view.base.EventArgs;
 import org.jemiahlabs.skrls.view.base.Window;
 
 import javafx.stage.Stage;
 
 public class AbstractWindow implements Window {
 	protected Stage stage;
-	protected Map<String, Object> params;
+	protected StageController controller;
 	
-	public AbstractWindow(Stage stage) {
+	public AbstractWindow(Stage stage, StageController controller) {
 		this.stage = stage;
+		this.controller = controller;
 	}
 	
 	@Override
-	public void setParams(Map<String, Object> params) {
-		this.params = params;
-	}
-	
-	@Override
-	public Map<String, Object> getParams() {
-		return params;
+	public void setParams(EventArgs args) {
+		controller.receive(args);
 	}
 	
 	@Override
