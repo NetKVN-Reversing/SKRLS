@@ -18,7 +18,7 @@ public class ProblemsViewBuilder implements WindowBuildable {
 		var appService = ApplicationServiceProvider.getInstance();
 		StageBuilder builder = new StageBuilder("/view/problemsstage.fxml");
 		
-		return builder.setTitle(appService.getName() + "-Problems")
+		return builder.setTitle(appService.getName() + "-notice")
 			.setIcon(appService.getIcon())
 			.setPrincipalWindow(principalWindow)
 			.undecorated()
