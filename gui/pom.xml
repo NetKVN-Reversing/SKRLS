@@ -107,7 +107,13 @@
 			<artifactId>javafx-fxml</artifactId>
 			<version>11</version>
 		</dependency>
-
+		
+		<dependency>
+			<groupId>org.jemiahlabs.skrls</groupId>
+			<artifactId>context</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+		
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
