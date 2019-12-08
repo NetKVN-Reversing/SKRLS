@@ -1,5 +1,7 @@
 package org.jemiahlabs.skrls.gui;
 
+import org.jemiahlabs.skrls.gui.services.LoggerFormatService;
+import org.jemiahlabs.skrls.view.base.EventArgs;
 import org.jemiahlabs.skrls.view.base.WindowBuildDirector;
 import org.jemiahlabs.skrls.view.main.MainViewBuilder;
 
@@ -16,6 +18,7 @@ public class App extends Application
 	public void init() throws Exception {
     	ApplicationServiceProvider appService = ApplicationServiceProvider.getInstance();
     	appService.addAttribute("host-services", getHostServices());
+    	appService.addAttribute("logger-format", new LoggerFormatService());
 	}
 
 	@Override
@@ -23,7 +26,7 @@ public class App extends Application
 		var mainView = WindowBuildDirector
 			.createWindow(new MainViewBuilder(primaryStage));
 		
-		mainView.setParams(null);
+		mainView.setParams(EventArgs.Empty());
 		mainView.show();
 	}
 }
