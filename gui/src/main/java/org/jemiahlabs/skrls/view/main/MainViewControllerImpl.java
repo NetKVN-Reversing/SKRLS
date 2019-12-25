@@ -136,6 +136,9 @@ public class MainViewControllerImpl implements MainViewController, Initializable
     @Override
 	public void loadLastConfiguration(Queue<Configuration> configurations) {
     	this.configurations = configurations;
+    	updateMenuRecent(configurations
+    			.stream()
+    			.collect(Collectors.toList()));
 	}
     
     @Override
@@ -236,7 +239,6 @@ public class MainViewControllerImpl implements MainViewController, Initializable
 			stackPane.toBack();
 		});
 		content.setActions(btnDone, btnCancel);
-			
 		dialog.show();
     }
     
@@ -353,8 +355,7 @@ public class MainViewControllerImpl implements MainViewController, Initializable
 					dialog.close();
 					stackPane.toBack();
 				});
-				content.setActions(btnDone);
-					
+				content.setActions(btnDone);					
 				dialog.show();
 			}
     	);
@@ -420,9 +421,7 @@ public class MainViewControllerImpl implements MainViewController, Initializable
     }
     
     private void addOpenRecent(String sourceCode, String destination, String targetLanguage) {
-    	System.out.println("aaa");
     	Configuration newConfiguration = new Configuration(sourceCode, destination, targetLanguage);
-    	
     	if(configurations.size() > 5) configurations.remove();
     	
     	configurations.add(newConfiguration);
