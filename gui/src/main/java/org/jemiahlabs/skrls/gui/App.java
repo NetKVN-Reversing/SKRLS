@@ -1,5 +1,6 @@
 package org.jemiahlabs.skrls.gui;
 
+import org.jemiahlabs.skrls.gui.services.ConfigurationLoaderService;
 import org.jemiahlabs.skrls.gui.services.LoggerFormatService;
 import org.jemiahlabs.skrls.view.base.EventArgs;
 import org.jemiahlabs.skrls.view.base.WindowBuildDirector;
@@ -19,6 +20,7 @@ public class App extends Application
     	ApplicationServiceProvider appService = ApplicationServiceProvider.getInstance();
     	appService.addAttribute("host-services", getHostServices());
     	appService.addAttribute("logger-format", new LoggerFormatService());
+    	appService.addAttribute("configuration-loader", new ConfigurationLoaderService("skrsconfig.temp"));
 	}
 
 	@Override

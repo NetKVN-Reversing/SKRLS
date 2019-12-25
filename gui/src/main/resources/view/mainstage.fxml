@@ -22,7 +22,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="543.0" prefWidth="964.0" style="-fx-background-color: #dcdde1;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.jemiahlabs.skrls.view.main.MainViewControllerImpl">
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="543.0" prefWidth="964.0" style="-fx-background-color: #dcdde1;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.jemiahlabs.skrls.view.main.MainViewControllerImpl">
    <children>
       <StackPane fx:id="stackPane" onMouseClicked="#closeStackPane" prefHeight="543.0" prefWidth="964.0" />
       <BorderPane prefHeight="678.0" prefWidth="922.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -196,15 +196,21 @@
                                  </font>
                               </Button>
                               <TextField fx:id="txtDestination" layoutX="48.0" layoutY="113.0" prefHeight="25.0" prefWidth="747.0" />
-                              <JFXButton layoutX="810.0" layoutY="53.0" text="Open">
+                              <JFXButton layoutX="810.0" layoutY="53.0" onAction="#openInputFileExplorer" text="Open">
                                  <graphic>
                                     <FontAwesomeIcon iconName="FOLDER_OPEN" />
                                  </graphic>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
                               </JFXButton>
-                              <JFXButton layoutX="810.0" layoutY="113.0" text="Open">
+                              <JFXButton layoutX="810.0" layoutY="113.0" onAction="#openOutputFileExplorer" text="Open">
                                  <graphic>
                                     <FontAwesomeIcon iconName="FOLDER_OPEN" />
                                  </graphic>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
                               </JFXButton>
                               <ComboBox fx:id="cbTargetLanguage" layoutX="48.0" layoutY="166.0" prefHeight="25.0" prefWidth="318.0">
                                  <cursor>
