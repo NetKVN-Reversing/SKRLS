@@ -57,7 +57,7 @@ public class PresenterMainViewImpl implements PresenterMainView {
 			controller.updateTargetLanguages(plugins);
 		}, 
 		(ex, msg) -> {
-			controller.updateInfoMessages("Extensions", "Not found extensions for loading: " + msg);
+			controller.updateInfoMessages("Extensions", msg);
 		});
 	}
 	

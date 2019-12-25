@@ -1,6 +1,9 @@
 package org.jemiahlabs.skrls.view.main.context;
 
-public class Configuration {
+import java.io.Serializable;
+
+public class Configuration implements Serializable {
+	private static final long serialVersionUID = 1988587772940883411L;
 	private String sourceCode;
 	private String outputDir;
 	private String targetLanguage;	
@@ -21,6 +24,5 @@ public class Configuration {
 
 	public String getTargetLanguage() {
 		return targetLanguage;
-	}
-	
+	}	
 }
