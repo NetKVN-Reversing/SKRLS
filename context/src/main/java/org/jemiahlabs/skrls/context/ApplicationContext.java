@@ -38,18 +38,14 @@ public class ApplicationContext {
 	
 	public void addPlugin(String uri, SuccessCase<Plugin> successCase, FailedCase<AbortivedPluginLoadException, String> failedCase) {
 		try {
-			File fileJar = new File(uri);
-			
+			File fileJar = new File(uri);			
 			if(!fileJar.exists() || !fileJar.isFile()) {
 				failedCase.failed(new AbortivedPluginLoadException("File jar not exists: " + fileJar.getPath()), uri);
 				return;
-			}
-			
-			Plugin plugin = pluginLoader.loadPlugin(fileJar, true);
-			
+			}			
+			Plugin plugin = pluginLoader.loadPlugin(fileJar, true);			
 			plugins.put(plugin.getNameable(), plugin);
-			successCase.success(plugin);
-			
+			successCase.success(plugin);			
 		} catch (AbortivedPluginLoadException e) {
 			failedCase.failed(e, uri);
 		} 
@@ -61,11 +57,9 @@ public class ApplicationContext {
 	
 	public void LoaderPlugins(SuccessCase<List<Plugin>> successCase, FailedCase<PluginsNotLoadException, String> failedCase) {
 		try {
-			List<Plugin> pluginsCorrect = pluginLoader.loadPlugins();
-			
+			List<Plugin> pluginsCorrect = pluginLoader.loadPlugins();			
 			pluginsCorrect.forEach((plugin) -> plugins.put(plugin.getNameable(), plugin));
-			successCase.success(Collections.unmodifiableList(pluginsCorrect));
-			
+			successCase.success(Collections.unmodifiableList(pluginsCorrect));			
 		} catch (PluginsNotLoadException e) {
 			failedCase.failed(e, e.getMessage());
 		}
