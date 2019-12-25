@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 import org.jemiahlabs.skrls.core.Nameable;
 import org.jemiahlabs.skrls.context.Plugin;
 import org.jemiahlabs.skrls.gui.ApplicationServiceProvider;
-import org.jemiahlabs.skrls.gui.services.ConfigurationLoaderService;
 import org.jemiahlabs.skrls.gui.services.LoggerFormatService;
 import org.jemiahlabs.skrls.view.aboutme.AboutMeViewBuilder;
 import org.jemiahlabs.skrls.view.base.EventArgs;
