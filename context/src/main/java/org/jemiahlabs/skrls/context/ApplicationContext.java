@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.jemiahlabs.skrls.context.events.FailedCase;
 import org.jemiahlabs.skrls.context.events.SuccessCase;
@@ -66,7 +67,7 @@ public class ApplicationContext {
 	}
 	
 	public Plugin[] getPlugins() {
-		return (Plugin[]) plugins.values().toArray();
+		return plugins.values().toArray(new Plugin[0]);
 	}
 	
 	public Plugin getPlugin(Nameable nameable) {
