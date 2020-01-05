@@ -3,3 +3,6 @@ parent.iml
 gui/gui.iml
 cli/cli.iml
 cli/target/
+cli-client/.idea
+cli-client/target
+context/context.iml
