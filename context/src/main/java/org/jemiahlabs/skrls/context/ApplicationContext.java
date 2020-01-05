@@ -1,10 +1,10 @@
 package org.jemiahlabs.skrls.context;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.jemiahlabs.skrls.context.events.FailedCase;
 import org.jemiahlabs.skrls.context.events.SuccessCase;
@@ -65,8 +65,10 @@ public class ApplicationContext {
 		}
 	}
 	
-	public Plugin[] getPlugins() {
-		return (Plugin[]) plugins.values().toArray();
+	public List<Plugin> getPlugins() {
+		return plugins.values()
+				.stream()
+				.collect(Collectors.toList());
 	}
 	
 	public Plugin getPlugin(Nameable nameable) {
@@ -74,7 +76,9 @@ public class ApplicationContext {
 	}
 	
 	public List<Nameable> getNamePlugins() {
-		return new ArrayList<Nameable>();
+		return plugins.keySet()
+				.stream()
+				.collect(Collectors.toList());
 	}
 
 	public Receiver getReceiver() {
