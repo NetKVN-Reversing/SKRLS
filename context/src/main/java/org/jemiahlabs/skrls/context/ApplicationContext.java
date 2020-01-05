@@ -36,18 +36,18 @@ public class ApplicationContext {
 		this.receiver = receiver;
 	}
 	
-	public void addPlugin(String uri, SuccessCase<Plugin> successCase, FailedCase<AbortivedPluginLoadException, String> failedCase) {
+	public void addPlugin(String uri, SuccessCase<Plugin> successCase, FailedCase<AbortivedPluginLoadException> failedCase) {
 		try {
 			File fileJar = new File(uri);			
 			if(!fileJar.exists() || !fileJar.isFile()) {
-				failedCase.failed(new AbortivedPluginLoadException("File jar not exists: " + fileJar.getPath()), uri);
+				failedCase.failed(new AbortivedPluginLoadException("File jar not exists: " + uri));
 				return;
 			}			
 			Plugin plugin = pluginLoader.loadPlugin(fileJar, true);			
 			plugins.put(plugin.getNameable(), plugin);
 			successCase.success(plugin);			
 		} catch (AbortivedPluginLoadException e) {
-			failedCase.failed(e, uri);
+			failedCase.failed(e);
 		} 
 	}
 	
@@ -55,13 +55,13 @@ public class ApplicationContext {
 		plugins.remove(nameable);
 	}
 	
-	public void LoaderPlugins(SuccessCase<List<Plugin>> successCase, FailedCase<PluginsNotLoadException, String> failedCase) {
+	public void LoaderPlugins(SuccessCase<List<Plugin>> successCase, FailedCase<PluginsNotLoadException> failedCase) {
 		try {
-			List<Plugin> pluginsCorrect = pluginLoader.loadPlugins();			
+			List<Plugin> pluginsCorrect = pluginLoader.loadPlugins(failedCase);			
 			pluginsCorrect.forEach((plugin) -> plugins.put(plugin.getNameable(), plugin));
 			successCase.success(Collections.unmodifiableList(pluginsCorrect));			
-		} catch (PluginsNotLoadException e) {
-			failedCase.failed(e, e.getMessage());
+		} catch (AbortivedPluginLoadException  e) {
+			failedCase.failed(new PluginsNotLoadException(e));
 		}
 	}
 

@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Properties;
 
 import org.jemiahlabs.skrls.context.Plugin;
+import org.jemiahlabs.skrls.context.events.FailedCase;
 import org.jemiahlabs.skrls.context.exceptions.AbortivedPluginLoadException;
 import org.jemiahlabs.skrls.context.exceptions.PluginsNotLoadException;
 import org.jemiahlabs.skrls.core.ExtractableKnowledge;
@@ -66,21 +67,24 @@ public class PluginLoader {
 		}
 	}
 	
-	public List<Plugin> loadPlugins() throws PluginsNotLoadException {
+	public List<Plugin> loadPlugins() throws AbortivedPluginLoadException {
+		return loadPlugins((ex) -> {});
+	}
+	
+	public List<Plugin> loadPlugins(FailedCase<PluginsNotLoadException> failedCase) throws AbortivedPluginLoadException  {
 		File pluginsDir = new File(PLUGINS_DIRECTORY);
 		List<Plugin> pluginsCorrect = new ArrayList<Plugin>();
 		
 		if(!pluginsDir.exists() || !pluginsDir.isDirectory() )
-			throw new PluginsNotLoadException("Not have plugins for load");
+			throw new AbortivedPluginLoadException ("Not have plugins for load");
 		
 		for (File folderPlugin : pluginsDir.listFiles()) {
 			for (File fileJar: folderPlugin.listFiles( (file) -> file.getName().endsWith(".jar") )) {
 				try {
 					Plugin plugin = loadPlugin(fileJar, false);
-					pluginsCorrect.add(plugin);
-				
+					pluginsCorrect.add(plugin);				
 				} catch (AbortivedPluginLoadException e) {
-					System.out.println(e.getMessage());
+					failedCase.failed(new PluginsNotLoadException(e));
 					continue;
 				}
 			}

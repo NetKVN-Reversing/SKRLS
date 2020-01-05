@@ -5,6 +5,10 @@ public class PluginsNotLoadException extends Exception {
 	
 	public final int CODE_ERROR = 2;
 	
+	public PluginsNotLoadException(Exception e) {
+		super(e);
+	}
+	
 	public PluginsNotLoadException(String msg) {
 		super(msg);
 	}
