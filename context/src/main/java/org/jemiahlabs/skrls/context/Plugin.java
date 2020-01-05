@@ -20,4 +20,24 @@ public class Plugin {
 		return extractableKnowledge;
 	}
 
+	public String getName(){
+		return this.nameable.getNameProduct();
+	}
+
+	public String getVersion(){
+		return this.nameable.getVersion();
+	}
+
+	public String getTargetLanguaje(){
+		return this.nameable.getTargetLanguage();
+	}
+
+	public String[] getAuthors(){
+		return this.nameable.getAuthors();
+	}
+
+	public String getDescription(){
+		return this.nameable.getDescription();
+	}
+
 }

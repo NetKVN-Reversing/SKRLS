@@ -64,7 +64,7 @@ public class ApplicationContext {
 			failedCase.failed(e, e.getMessage());
 		}
 	}
-	
+
 	public List<Plugin> getPlugins() {
 		return plugins.values()
 				.stream()
