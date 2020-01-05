@@ -62,7 +62,7 @@ public class SKRLSCommandRunner {
             System.out.println("Please check usage");
             return Optional.empty();
         } catch (ParseException e){
-            System.out.println("Unable to parse input params: " + e.getMessage());
+            System.out.println( e.getMessage());
             System.out.println("Please check usage");
             return Optional.empty();
         }
