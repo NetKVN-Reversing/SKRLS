@@ -3,7 +3,9 @@ package com.jemiahlabs.skrls.cli;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import org.jemiahlabs.skrls.context.ApplicationContext;
 import org.jemiahlabs.skrls.context.Plugin;
 
@@ -17,7 +19,7 @@ public class SKRLSOptionsProcessor {
         this.context = initializeContext();
         argConsumers = new HashMap<>();
         initializeArgConsumers();
-        context.LoaderPlugins((x)->{}, this::onFail);
+        context.loaderPlugins((x)->{}, this::onFail);
     }
 
     public void process(String option, String... args){
@@ -67,7 +69,19 @@ public class SKRLSOptionsProcessor {
 
                 case "remove":
                     if(args.length > 1){
-                        //TODO implement this
+                        String[] nameAndVersion = args[1].split(":");
+                        List<Plugin> installedPlugins = context.getPlugins();
+                        List<Plugin> matches = installedPlugins.stream().filter( p -> p.getName().equals(nameAndVersion[0])).collect(Collectors.toList());
+                        if(matches.size() > 1 && nameAndVersion.length == 1){
+                            System.out.println("found more than 1 plugin with the same name, please specify the number of the version");
+                        }else if(matches.size() > 1 && nameAndVersion.length == 2){
+                            Optional<Plugin> foundPlugin = matches.stream().filter(p -> p.getVersion().equals(nameAndVersion[1])).findFirst();
+                            foundPlugin.ifPresent( p -> context.removePlugin(p.getNameable()));
+                            System.out.println("Plugin removed succesfully");
+                        }else if(matches.size() == 1 && nameAndVersion.length == 1){
+                            context.removePlugin(matches.get(0).getNameable());
+                            System.out.println("Plugin removed successfully");
+                        }
                     } else {
                         System.out.println("missing argument [pluginName]");
                         System.out.println("usage: SKRLS -l remove [pluginName]");
