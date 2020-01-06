@@ -22,7 +22,7 @@ public class ReceiverImpl implements Receiver {
 			String messageFormat = loggerFormat.getMessage("KDM Models", message.getText(), message.getTypeMessage().name());
 			controller.appendMessageToConsole(topic, messageFormat);
 		} catch (Exception e) {
-			System.out.println("message");
+			controller.updateInfoMessages("KDM Models", e.getMessage());
 		}
 	}
 }

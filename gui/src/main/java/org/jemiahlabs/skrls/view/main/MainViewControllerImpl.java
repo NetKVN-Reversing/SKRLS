@@ -110,7 +110,6 @@ public class MainViewControllerImpl implements MainViewController, Initializable
     	presenter.loadPlugins();
     	presenter.loadConfiguration();
     	
-    	configurations = new ArrayDeque<Configuration>();
     	warningSystemMessages = new ArrayList<String>();
     	infoSystemMessages = new ArrayList<String>();
     	consoleMessages = new ArrayList<ConsoleMessage>();
@@ -281,11 +280,11 @@ public class MainViewControllerImpl implements MainViewController, Initializable
     	disposeOpenWindowCurrent();
 		
     	try {
-			openWindowCurrent = WindowBuildDirector.createWindow(new ProblemsViewBuilder(this));
-			EventArgs args = new EventArgs();
+    		EventArgs args = new EventArgs();
 			args.addArgument("warningMessages", warningSystemMessages);
 			args.addArgument("infoMessages", infoSystemMessages);
-			
+    		
+			openWindowCurrent = WindowBuildDirector.createWindow(new ProblemsViewBuilder(this));							
 			openWindowCurrent.setParams(args);
 			openWindowCurrent.show();
 		} catch (WindowBuildableException e) {
@@ -411,13 +410,13 @@ public class MainViewControllerImpl implements MainViewController, Initializable
     @Override
     public void beforeClose() {
     	presenter.saveConfiguration(configurations);
-    	Platform.exit();
     }
     
     @FXML
     void exitProgram(ActionEvent event) {
-    	mainView.dispose();
     	beforeClose();
+    	mainView.dispose();
+    	Platform.exit();
     }
     
     private void addOpenRecent(String sourceCode, String destination, String targetLanguage) {

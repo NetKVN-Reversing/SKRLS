@@ -52,12 +52,12 @@ public class PresenterMainViewImpl implements PresenterMainView {
 		
 	@Override
 	public void loadPlugins() {
-		context.LoaderPlugins(plugins -> {
+		context.loaderPlugins(plugins -> {
 			controller.updateInfoMessages("Extensions", "Extensions loaded correctly");
 			controller.updateTargetLanguages(plugins);
 		}, 
-		(ex, msg) -> {
-			controller.updateInfoMessages("Extensions", msg);
+		(ex) -> {
+			controller.updateInfoMessages("Extensions", ex.getMessage());
 		});
 	}
 	
