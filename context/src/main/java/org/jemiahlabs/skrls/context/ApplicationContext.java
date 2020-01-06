@@ -1,6 +1,7 @@
 package org.jemiahlabs.skrls.context;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.Hashtable;
 import java.util.List;
@@ -52,10 +53,15 @@ public class ApplicationContext {
 	}
 	
 	public void removePlugin(Nameable nameable) {
-		plugins.remove(nameable);
+		Plugin plugin = plugins.remove(nameable);
+		try {
+			pluginLoader.removePlugin(plugin);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
-	public void LoaderPlugins(SuccessCase<List<Plugin>> successCase, FailedCase<PluginsNotLoadException> failedCase) {
+	public void loaderPlugins(SuccessCase<List<Plugin>> successCase, FailedCase<PluginsNotLoadException> failedCase) {
 		try {
 			List<Plugin> pluginsCorrect = pluginLoader.loadPlugins(failedCase);			
 			pluginsCorrect.forEach((plugin) -> plugins.put(plugin.getNameable(), plugin));

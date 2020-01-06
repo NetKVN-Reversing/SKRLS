@@ -23,8 +23,8 @@ import org.jemiahlabs.skrls.core.Nameable;
 public class PluginLoader {
 	public final static String PLUGINS_DIRECTORY = System.getProperty("user.home") + System.getProperty("file.separator") + "skrlsplugins";
 	
-	public static Plugin createPlugin(Nameable nameable, ExtractableKnowledge extractableKnowledgeClass) {
-		return new Plugin(nameable, extractableKnowledgeClass);
+	public static Plugin createPlugin(Nameable nameable, ExtractableKnowledge extractableKnowledgeClass, String location, URLClassLoader classLoader) {
+		return new Plugin(nameable, extractableKnowledgeClass, location, classLoader);
 	}
 
 	public PluginLoader() {
@@ -33,11 +33,12 @@ public class PluginLoader {
 	
 	public Plugin loadPlugin(File fileJar, boolean isNewPlugin) throws AbortivedPluginLoadException {
 		try {
-			Plugin pluginLoaded = resolvePlugin(fileJar);
+			if(isNewPlugin) {
+				File pluginDir = copyJarFileTopluginDirectory(fileJar);
+				fileJar = new File(pluginDir.getAbsolutePath() + System.getProperty("file.separator") + fileJar.getName());
+			}
 			
-			if(isNewPlugin)
-				copyJarFileToPluginsDirectory(fileJar);
-			
+			Plugin pluginLoaded = resolvePlugin(fileJar);									
 			return pluginLoaded;
 			
 		} catch (IOException e) {
@@ -72,13 +73,13 @@ public class PluginLoader {
 	}
 	
 	public List<Plugin> loadPlugins(FailedCase<PluginsNotLoadException> failedCase) throws AbortivedPluginLoadException  {
-		File pluginsDir = new File(PLUGINS_DIRECTORY);
+		File pluginDir = new File(PLUGINS_DIRECTORY);
 		List<Plugin> pluginsCorrect = new ArrayList<Plugin>();
 		
-		if(!pluginsDir.exists() || !pluginsDir.isDirectory() )
+		if(!pluginDir.exists() || !pluginDir.isDirectory() )
 			throw new AbortivedPluginLoadException ("Not have plugins for load");
 		
-		for (File folderPlugin : pluginsDir.listFiles()) {
+		for (File folderPlugin : pluginDir.listFiles()) {
 			for (File fileJar: folderPlugin.listFiles( (file) -> file.getName().endsWith(".jar") )) {
 				try {
 					Plugin plugin = loadPlugin(fileJar, false);
@@ -93,34 +94,58 @@ public class PluginLoader {
 		return pluginsCorrect;
 	}
 	
-	private void copyJarFileToPluginsDirectory(File fileJar) throws IOException, ArrayIndexOutOfBoundsException {
-		File pluginsDir = copyPluginToPluginsDirectory(fileJar);
-		copyPluginDependeciesToPluginsDirectory(fileJar, pluginsDir);
+	public void removePlugin(Plugin plugin) throws IOException {
+		File file = new File(plugin.getLocation());
+		plugin.disconect();
+		removeDirectory(file);
 	}
 	
-	private File copyPluginToPluginsDirectory(File fileJar) throws IOException, ArrayIndexOutOfBoundsException {
+	private void removeFile(File file) {
+		try {
+			Files.deleteIfExists(file.toPath());
+		} catch (IOException e) {
+			System.out.println(file.getAbsolutePath() + ": " + e.getMessage());
+		}
+	}
+	
+	private void removeDirectory(File file) {
+		File[] contents = file.listFiles();
+		for(File content: contents) {
+			if(content.isDirectory()) removeDirectory(content);
+			else removeFile(content);
+		}
+		removeFile(file);
+	}
+	
+	private File copyJarFileTopluginDirectory(File fileJar) throws IOException, ArrayIndexOutOfBoundsException {
+		File pluginDir = copyPluginTopluginDirectory(fileJar);
+		copyPluginDependeciesTopluginDirectory(fileJar, pluginDir);
+		return pluginDir;
+	}
+	
+	private File copyPluginTopluginDirectory(File fileJar) throws IOException, ArrayIndexOutOfBoundsException {
 		String folderInside = fileJar.getName().split("\\.jar")[0];
-		File pluginsDir = new File(PLUGINS_DIRECTORY + System.getProperty("file.separator") + folderInside);
+		File pluginDir = new File(PLUGINS_DIRECTORY + System.getProperty("file.separator") + folderInside);
 		
-		if (!pluginsDir.exists()) 
-			Files.createDirectories(pluginsDir.toPath());
+		if (!pluginDir.exists()) 
+			Files.createDirectories(pluginDir.toPath());
 		
         Files.copy(
         	fileJar.toPath(), 
-        	Paths.get(pluginsDir.getAbsolutePath(), System.getProperty("file.separator"), fileJar.getName()), 
+        	Paths.get(pluginDir.getAbsolutePath(), System.getProperty("file.separator"), fileJar.getName()), 
         	StandardCopyOption.REPLACE_EXISTING
         );
         
-        return pluginsDir;
+        return pluginDir;
 	}
 	
-	private void copyPluginDependeciesToPluginsDirectory(File fileJar, File pluginsDir) throws IOException {
+	private void copyPluginDependeciesTopluginDirectory(File fileJar, File pluginDir) throws IOException {
 		File pluginDependecies = new File(fileJar.getParent() + System.getProperty("file.separator") + "lib");
         
         if(!pluginDependecies.exists() || !pluginDependecies.isDirectory())
         	return;
         
-        File pathDestination = new File(pluginsDir.getAbsolutePath() + System.getProperty("file.separator") + pluginDependecies.getName());
+        File pathDestination = new File(pluginDir.getAbsolutePath() + System.getProperty("file.separator") + pluginDependecies.getName());
         if(!pathDestination.exists()) {
         	Files.copy(
                 pluginDependecies.toPath(), 
@@ -154,13 +179,12 @@ public class PluginLoader {
 			= findSubClass(loader, properties.getProperty("plugin.package.parser"), ExtractableKnowledge.class)
 				.getConstructor();
 		
-		return createPlugin(constructorNameable.newInstance(), constructorExtractableKnowledge.newInstance());
+		return createPlugin(constructorNameable.newInstance(), constructorExtractableKnowledge.newInstance(), fileJar.getParent(), (URLClassLoader)loader);
 	}
 	
 	private Properties loadProperties(ClassLoader loader) throws IOException {
 		Properties properties = new Properties();
-		properties.load(loader.getResourceAsStream("plugin.properties"));
-		
+		properties.load(loader.getResourceAsStream("plugin.properties"));		
 		return properties;
 	}
 	
