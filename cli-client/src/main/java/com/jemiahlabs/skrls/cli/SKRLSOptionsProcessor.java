@@ -67,6 +67,10 @@ public class SKRLSOptionsProcessor {
                 System.out.println("Plugin removed successfully");
             }
         });
+
+        argConsumers.put("analyze", args -> {
+
+        });
     }
 
     private void onSuccess(List<Plugin> plugins){

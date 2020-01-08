@@ -31,17 +31,20 @@ public class SKRLSCommandRunner {
         Optional<CommandLine> commandLineEnvelop = parseArgs();
         if(commandLineEnvelop.isPresent()){
             CommandLine cmd = commandLineEnvelop.get();
+
             if(cmd.hasOption("v")){
                 System.out.println("SKRLS-CLI v1.0.0");
             }
+
             if(cmd.hasOption("h")){
                 formatter.printHelp("SKRLS", options, true);
             }
+
             if(cmd.hasOption("p")){
                 if(!(cmd.hasOption("add") || cmd.hasOption("list") || cmd.hasOption("remove"))){
                     System.out.println("Missing suboption for -p option, please check");
                     formatter.printHelp("SKRLS", options, true);
-                }else{
+                } else {
                     if(cmd.hasOption("add")){
                         processor.process("add", cmd.getOptionValues("add"));
                     }else if(cmd.hasOption("list")){
@@ -51,11 +54,19 @@ public class SKRLSCommandRunner {
                     }
                 }
             }
-            if(cmd.hasOption("a")){
 
+            if(cmd.hasOption("a")){
+                if(!(cmd.hasOption("language") && cmd.hasOption("input") && cmd.hasOption("output"))){
+                    System.out.println("Missing arguments for analyze option. Please provide plugin language, input directory and output directory, please check");
+                    formatter.printHelp("SKRLS", options, true);
+                } else {
+                    String[] fullArgs = { cmd.getOptionValue("language"), cmd.getOptionValue("input"), cmd.getOptionValue("output") };
+                    processor.process("analyze", fullArgs);
+                }
             }
+
         }else{
-            formatter.printHelp("SKRLS [options] [suboption] [<args>] ", options);
+            formatter.printHelp("SKRLS", options, true);
             System.exit(1);
         }
     }

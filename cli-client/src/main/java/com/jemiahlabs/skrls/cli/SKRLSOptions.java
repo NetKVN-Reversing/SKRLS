@@ -41,6 +41,7 @@ public class SKRLSOptions {
 
             options.addOptionGroup(baseOptions);
             options.addOptionGroup(pluginSubOptions);
+            options.addOptionGroup(analyzeSubOptions);
             options.addOption(input);
             options.addOption(output);
         }
