@@ -1,6 +1,5 @@
 package com.jemiahlabs.skrls.cli;
 
-import java.util.Objects;
 import java.util.Optional;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;

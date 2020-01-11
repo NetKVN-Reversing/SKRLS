@@ -18,9 +18,9 @@ public class SKRLSOptions {
             Option list = Option.builder().longOpt("list").desc("use with -p option. List installed plugins").build();
             Option remove = Option.builder().longOpt("remove").hasArg().argName("PLUGIN").desc("use with -p option. Remove an installed plugin").build();
             Option analyze = Option.builder("a").longOpt("analyze").desc("analyze source files").build();
-            Option language = Option.builder().longOpt("language").hasArg().argName("LANGUAGE PLUGIN").desc("use with option -a. Select the plugin language").build();
-            Option input = Option.builder().longOpt("input").hasArg().argName("FILE PATH").desc("use with option -a. Specify the input directory").build();
-            Option output = Option.builder().longOpt("output").hasArg().argName("FILE PATH").desc("use with option -a. Specify the output directory").build();
+            Option language = Option.builder().longOpt("language").hasArg().numberOfArgs(1).argName("LANGUAGE PLUGIN").desc("use with option -a. Select the plugin language").build();
+            Option input = Option.builder().longOpt("input").hasArg().numberOfArgs(1).argName("FILE PATH").desc("use with option -a. Specify the input directory").build();
+            Option output = Option.builder().longOpt("output").hasArg().numberOfArgs(1).argName("FILE PATH").desc("use with option -a. Specify the output directory").build();
             Option verbose = Option.builder().longOpt("verbose").desc("use with option -a. Be very verbose").build();
 
             options = new Options();

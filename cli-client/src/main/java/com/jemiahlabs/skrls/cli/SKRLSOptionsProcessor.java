@@ -3,11 +3,14 @@ package com.jemiahlabs.skrls.cli;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.jemiahlabs.skrls.context.ApplicationContext;
 import org.jemiahlabs.skrls.context.Plugin;
+import org.jemiahlabs.skrls.core.ExtractableKnowledge;
+import org.jemiahlabs.skrls.core.Producer;
 
 public class SKRLSOptionsProcessor {
 
@@ -69,12 +72,24 @@ public class SKRLSOptionsProcessor {
         });
 
         argConsumers.put("analyze", args -> {
-
+            String requestedPlugin = args[0];
+            String inputDir = args[1];
+            String outputDir = args[2];
+            Plugin pluginToUse = null;
+            for (Plugin p : context.getPlugins()){
+                if(p.getName().equals(args[0])){
+                    pluginToUse = p;
+                    break;
+                }
+            }
+            if(Objects.nonNull(pluginToUse)){
+                ExtractableKnowledge extractor = pluginToUse.getExtractableKnowledge();
+                Producer producer = new ProducerImpl(new ChannelImpl(context.getReceiver()));
+                extractor.extractKDM(producer,inputDir, outputDir);
+            } else {
+                System.out.println("plugin " + requestedPlugin + "not found");
+            }
         });
-    }
-
-    private void onSuccess(List<Plugin> plugins){
-        plugins.forEach(this::onSuccess);
     }
 
     private void onSuccess(Plugin plugin){
