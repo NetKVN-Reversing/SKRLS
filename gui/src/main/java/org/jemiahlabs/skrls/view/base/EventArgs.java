@@ -14,6 +14,10 @@ public class EventArgs {
 		arguments = new HashMap<String, Object>(10);
 	}
 	
+	public boolean hasArgument(String key) {
+		return arguments.containsKey(key);
+	}
+	
 	public void addArgument(String key, Object value) {
 		arguments.put(key, value);
 	}

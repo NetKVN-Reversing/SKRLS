@@ -17,11 +17,11 @@ public class ProducerImpl extends Producer {
 
 	@Override
 	public void emitWarningMessage(String text) {
-		getChannel().sendMessage(new Message(text, TypeMessage.INFO));
+		getChannel().sendMessage(new Message(text, TypeMessage.WARNNING));
 	}
 
 	@Override
 	public void emitErrorMessage(String text) {
-		getChannel().sendMessage(new Message(text, TypeMessage.INFO));
+		getChannel().sendMessage(new Message(text, TypeMessage.ERROR));
 	}
 }
