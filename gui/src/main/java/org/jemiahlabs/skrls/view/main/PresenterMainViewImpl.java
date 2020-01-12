@@ -3,9 +3,11 @@ package org.jemiahlabs.skrls.view.main;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Queue;
 
 import org.jemiahlabs.skrls.context.ApplicationContext;
+import org.jemiahlabs.skrls.context.Plugin;
 import org.jemiahlabs.skrls.view.main.context.ProducerImpl;
 import org.jemiahlabs.skrls.view.main.context.ChannelImpl;
 import org.jemiahlabs.skrls.view.main.context.Configuration;
@@ -87,5 +89,10 @@ public class PresenterMainViewImpl implements PresenterMainView {
 	private void printConsole(String topic, String Message) {
 		LoggerFormatService loggerFormat = (LoggerFormatService) ApplicationServiceProvider.getInstance().getAttribute("logger-format");
 		controller.appendMessageToConsole(topic, loggerFormat.getMessage("KDM Models", Message, topic));
+	}
+
+	@Override
+	public List<Plugin> getPlugins() {
+		return context.getPlugins();
 	}
 }

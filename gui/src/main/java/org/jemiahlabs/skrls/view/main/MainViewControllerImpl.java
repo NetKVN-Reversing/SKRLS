@@ -4,7 +4,6 @@ import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -124,9 +123,11 @@ public class MainViewControllerImpl implements MainViewController, Initializable
     
     @Override
 	public void notifyStatus(SubWindow subWindow, EventArgs evtArgs) {
-
+    	if(evtArgs.hasArgument("action")) {
+    		acceptAction(evtArgs);
+    	}
 	}
-	
+        
     @Override
 	public void setWindow(Window window) {
     	mainView = window;
@@ -147,10 +148,13 @@ public class MainViewControllerImpl implements MainViewController, Initializable
 				targetLanguages = plugins.stream()
 		    			.map(plugin -> plugin.getNameable())
 		    			.collect(
-		                 Collectors.toMap(Nameable::getNameProduct, nameable -> nameable));
+		                 Collectors.toMap(
+		                		 nameable -> String.format("%s:%s", nameable.getNameProduct(), nameable.getVersion()), 
+		                		 nameable -> nameable));
 		    	
 				var keySet = targetLanguages.keySet();
 				var size = keySet.size();
+				cbTargetLanguage.getItems().clear();
 		    	cbTargetLanguage.getItems().addAll(keySet.toArray(new String[size]));
 			}
         );
@@ -192,7 +196,7 @@ public class MainViewControllerImpl implements MainViewController, Initializable
     	try {
     		DirectoryChooser directoryChooser = new DirectoryChooser();
     		directoryChooser.setTitle("Find Source Code");
-    		File fileDirectory  = directoryChooser.showDialog(root.getScene().getWindow());
+    		File fileDirectory = directoryChooser.showDialog(root.getScene().getWindow());
         	
         	if (fileDirectory  != null) txtSource.setText(fileDirectory.getAbsolutePath());
     	} catch(Exception ex) {
@@ -410,13 +414,13 @@ public class MainViewControllerImpl implements MainViewController, Initializable
     @Override
     public void beforeClose() {
     	presenter.saveConfiguration(configurations);
+    	Platform.exit();
     }
     
     @FXML
     void exitProgram(ActionEvent event) {
     	beforeClose();
     	mainView.dispose();
-    	Platform.exit();
     }
     
     private void addOpenRecent(String sourceCode, String destination, String targetLanguage) {
@@ -449,5 +453,10 @@ public class MainViewControllerImpl implements MainViewController, Initializable
 		if(openWindowCurrent != null)
     		openWindowCurrent.dispose();
 	}
+    
+    private void acceptAction(EventArgs evtArgs) {
+    	List<Plugin> plugins = presenter.getPlugins();
+		if(plugins != null) updateTargetLanguages(plugins);
+    }
 
 }
