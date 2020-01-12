@@ -4,3 +4,4 @@ gui/gui.iml
 cli-client/.idea
 cli-client/target
 context/context.iml
+core/core.iml
