@@ -3,7 +3,7 @@ package com.jemiahlabs.skrls.cli;
 import org.jemiahlabs.skrls.core.Message;
 import org.jemiahlabs.skrls.core.Receiver;
 
-public class ReceiverImpl implements Receiver {
+public class SoutReceiver implements Receiver {
 
     @Override
     public void Receive(Message message) {

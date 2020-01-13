@@ -1,5 +1,6 @@
 package com.jemiahlabs.skrls.cli;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,7 @@ import org.jemiahlabs.skrls.context.ApplicationContext;
 import org.jemiahlabs.skrls.context.Plugin;
 import org.jemiahlabs.skrls.core.ExtractableKnowledge;
 import org.jemiahlabs.skrls.core.Producer;
+import org.jemiahlabs.skrls.core.Receiver;
 
 public class SKRLSOptionsProcessor {
 
@@ -30,7 +32,7 @@ public class SKRLSOptionsProcessor {
     }
 
     private ApplicationContext initializeContext(){
-        ApplicationContext context = ApplicationContext.GetNewInstance(new ReceiverImpl());
+        ApplicationContext context = ApplicationContext.GetNewInstance(new SoutReceiver());
         return context;
     }
 
@@ -72,22 +74,43 @@ public class SKRLSOptionsProcessor {
         });
 
         argConsumers.put("analyze", args -> {
-            String requestedPlugin = args[0];
+            String pluginName;
+            String pluginVersion = null;
             String inputDir = args[1];
             String outputDir = args[2];
-            Plugin pluginToUse = null;
-            for (Plugin p : context.getPlugins()){
-                if(p.getName().equals(args[0])){
-                    pluginToUse = p;
-                    break;
+            Receiver receiver = Objects.nonNull(args[3]) ? context.getReceiver() : new QuietReceiver();
+            if(args[0].contains(":")) {
+                String[] nameAndVersion = args[0].split(":");
+                pluginName = nameAndVersion[0];
+                pluginVersion = nameAndVersion[1];
+            } else {
+                pluginName = args[0];
+            }
+            List<Plugin> plugins = new ArrayList<>();
+            for(Plugin p: context.getPlugins()){
+                if(p.getName().equals(pluginName)){
+                    plugins.add(p);
                 }
             }
-            if(Objects.nonNull(pluginToUse)){
-                ExtractableKnowledge extractor = pluginToUse.getExtractableKnowledge();
-                Producer producer = new ProducerImpl(new ChannelImpl(context.getReceiver()));
+            if(plugins.size() > 1){
+                if(Objects.isNull(pluginVersion)){
+                    System.out.println("there is more than one plugin with the same name, please specify the version");
+                } else {
+                    for(Plugin p : plugins){
+                        if(p.getVersion().equals(pluginVersion)){
+                            ExtractableKnowledge extractor = p.getExtractableKnowledge();
+                            Producer producer = new ProducerImpl(new ChannelImpl(receiver));
+                            extractor.extractKDM(producer,inputDir, outputDir);
+                        }
+                        break;
+                    }
+                }
+            } else if(plugins.size() == 1){
+                ExtractableKnowledge extractor = plugins.get(0).getExtractableKnowledge();
+                Producer producer = new ProducerImpl(new ChannelImpl(receiver));
                 extractor.extractKDM(producer,inputDir, outputDir);
             } else {
-                System.out.println("plugin " + requestedPlugin + "not found");
+                System.out.println("plugin " + pluginName + "not found");
             }
         });
     }

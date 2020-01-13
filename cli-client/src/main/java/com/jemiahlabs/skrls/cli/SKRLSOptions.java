@@ -21,7 +21,7 @@ public class SKRLSOptions {
             Option language = Option.builder().longOpt("language").hasArg().numberOfArgs(1).argName("LANGUAGE PLUGIN").desc("use with option -a. Select the plugin language").build();
             Option input = Option.builder().longOpt("input").hasArg().numberOfArgs(1).argName("FILE PATH").desc("use with option -a. Specify the input directory").build();
             Option output = Option.builder().longOpt("output").hasArg().numberOfArgs(1).argName("FILE PATH").desc("use with option -a. Specify the output directory").build();
-            Option verbose = Option.builder().longOpt("verbose").desc("use with option -a. Be very verbose").build();
+            Option verbose = Option.builder().longOpt("verbose").optionalArg(true).desc("use with option -a. Be very verbose").build();
 
             options = new Options();
             OptionGroup baseOptions = new OptionGroup();
@@ -29,7 +29,6 @@ public class SKRLSOptions {
             baseOptions.addOption(help);
             baseOptions.addOption(plugin);
             baseOptions.addOption(analyze);
-            baseOptions.addOption(verbose);
 
             OptionGroup pluginSubOptions = new OptionGroup();
             pluginSubOptions.addOption(add);
@@ -39,11 +38,13 @@ public class SKRLSOptions {
             OptionGroup analyzeSubOptions = new OptionGroup();
             analyzeSubOptions.addOption(language);
 
+
             options.addOptionGroup(baseOptions);
             options.addOptionGroup(pluginSubOptions);
             options.addOptionGroup(analyzeSubOptions);
             options.addOption(input);
             options.addOption(output);
+            options.addOption(verbose);
         }
         return options;
     }
