@@ -78,7 +78,7 @@ public class SKRLSOptionsProcessor {
             String pluginVersion = null;
             String inputDir = args[1];
             String outputDir = args[2];
-            Receiver receiver = Objects.nonNull(args[3]) ? context.getReceiver() : new QuietReceiver();
+            Receiver receiver = context.getReceiver();
             if(args[0].contains(":")) {
                 String[] nameAndVersion = args[0].split(":");
                 pluginName = nameAndVersion[0];

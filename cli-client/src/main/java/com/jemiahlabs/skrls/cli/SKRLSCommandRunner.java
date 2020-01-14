@@ -59,7 +59,7 @@ public class SKRLSCommandRunner {
                     System.out.println("Missing arguments for analyze option. Please provide plugin language, input directory and output directory, please check");
                     formatter.printHelp("SKRLS", options, true);
                 } else {
-                    String[] fullArgs = { cmd.getOptionValue("language"), cmd.getOptionValue("input"), cmd.getOptionValue("output"), cmd.hasOption("verbose") ? "" : null };
+                    String[] fullArgs = { cmd.getOptionValue("language"), cmd.getOptionValue("input"), cmd.getOptionValue("output")};
                     processor.process("analyze", fullArgs);
                 }
             }
