@@ -24,7 +24,7 @@ public class SKRLSOptionsProcessor {
         this.context = initializeContext();
         argConsumers = new HashMap<>();
         initializeArgConsumers();
-        context.loaderPlugins((x)->{}, this::onFail);
+        context.loaderPlugins((x)->{}, (x) -> {});
     }
 
     public void process(String option, String... args){
